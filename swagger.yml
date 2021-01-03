@@ -1,0 +1,127 @@
+swagger: "2.0"
+host: "localhost:9000"
+consumes:
+  - application/json
+info:
+  title: Assessment Task
+  version: 0.1.0
+basePath: /
+produces:
+  - application/json
+schemes:
+  - https
+paths:
+  /registerUser:
+    post:
+      tags: [Users]
+      summary: "This endpoint entertain the registering user functionality"
+      operationId: RegisterUser
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "RegisterUserBody"
+          description: This is how the body of the register user request body will look like.
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/RegisterUserDefinition"
+      responses:
+        200:
+          description: Sucessfull Registeration
+          schema:
+            $ref: "#/definitions/SuccessResponseDefinition"
+        400:
+          description: server could not understand the request due to invalid syntax
+
+  /loginUser:
+    post:
+      tags: [Users]
+      summary: "logging the user"
+      operationId: "loginUser"
+      produces: [application/json]
+      parameters:
+        - name: "LoginUserBody"
+          in: "body"
+          description: This is how the body of the login user request body will look like.
+          required: true
+          schema:
+            $ref: "#/definitions/LoginUserDefinition"
+      responses:
+        "200":
+          description: Sucessfull Registeration
+          schema:
+            $ref: "#/definitions/LoginSuccessResponseDefinition"
+        "400":
+          description: "Invalid username/password supplied"
+  /updateUser:
+    put:
+      tags: [Users]
+      summary: "updating the users details in the database"
+      description: "To update a new user in to the mysql server installed in my local machine"
+      operationId: UpdateUser
+      consumes:
+        - "application/json"
+      parameters:
+        - name: "UpdateUserBody"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateUsersDefinition"
+      responses:
+        200:
+          description: Successful registeration
+          schema:
+            $ref: "#/definitions/SuccessResponseDefinition"
+        400:
+          description: Bad Request
+        404:
+          schema:
+            type: string
+          description: User not found
+        500:
+          schema:
+            type: string
+          description: Server error
+definitions:
+  RegisterUserDefinition:
+    type: object
+    required: [Name, Email, Password]
+    properties:
+      Name:
+        type: string
+      Email:
+        type: string
+      Password:
+        type: string
+  LoginUserDefinition:
+    type: object
+    required: [Email, Password]
+    properties:
+      Email:
+        type: string
+      Password:
+        type: string
+  SuccessResponseDefinition:
+    type: object
+    properties:
+      message:
+        type: string
+  LoginSuccessResponseDefinition:
+    type: object
+    properties:
+      token:
+        type: string
+  UpdateUsersDefinition:
+    type: object
+    required: [Name, Password, Email, JwtToken]
+    properties:
+      Name:
+        type: string
+      Password:
+        type: string
+      Email:
+        type: string
+      JwtToken:
+        type: string
